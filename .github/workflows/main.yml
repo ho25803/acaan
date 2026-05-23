@@ -6,21 +6,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           
-      - name: Install dependencies
+      - name: Install Flet
         run: pip install flet
         
-      # flet-dev에서 제공하는 공식 빌드 액션입니다. 
-      # 안드로이드 SDK, Flutter, 라이선스 동의까지 모두 자동으로 처리합니다.
-      - name: Build Flet App
-        uses: flet-dev/build-flet-apk@v1
-        with:
-          module-name: app
-          
+      - name: Build APK
+        # flet-cli가 알아서 flutter sdk를 설치하도록 하고, --yes 옵션으로 자동화합니다.
+        run: python -m flet.cli build apk --module-name app --yes
+        
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
