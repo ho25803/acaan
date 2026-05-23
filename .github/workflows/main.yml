@@ -1,0 +1,28 @@
+name: Build Flet APK
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          
+      - name: Install dependencies
+        run: pip install flet
+        
+      # flet-dev에서 제공하는 공식 빌드 액션입니다. 
+      # 안드로이드 SDK, Flutter, 라이선스 동의까지 모두 자동으로 처리합니다.
+      - name: Build Flet App
+        uses: flet-dev/build-flet-apk@v1
+        with:
+          module-name: app
+          
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/apk/app-release.apk
