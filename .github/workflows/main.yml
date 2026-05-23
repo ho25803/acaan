@@ -21,11 +21,13 @@ jobs:
         run: pip install flet
         
       - name: Build APK
-        # flet-cli가 알아서 flutter sdk를 설치하도록 하고, --yes 옵션으로 자동화합니다.
         run: python -m flet.cli build apk --module-name app --yes
         
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: build/apk/app-release.apk
+          # 빌드 결과물 경로가 어디든 상관없이 apk 파일을 찾아서 업로드합니다.
+          path: |
+            build/**/*.apk
+            build/**/outputs/**/*.apk
